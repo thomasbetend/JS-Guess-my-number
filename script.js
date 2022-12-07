@@ -1,16 +1,16 @@
 'use strict';
 
-const qry = (className) => {
+const getEltByClass = (className) => {
     return document.querySelector(`.${className}`);
 }
 
-let messageElt = qry('message');
-let finalNumberElt = qry('number');
-let scoreElt = qry('score');
-let highscoreElt = qry('highscore');
-let btnPlay = qry('check');
-let inputElt = qry('guess');
-let btnPlayAgain = qry('again');
+let messageElt = getEltByClass('message');
+let finalNumberElt = getEltByClass('number');
+let scoreElt = getEltByClass('score');
+let highscoreElt = getEltByClass('highscore');
+let btnPlay = getEltByClass('check');
+let inputElt = getEltByClass('guess');
+let btnPlayAgain = getEltByClass('again');
 
 function getRandomInt(max) {
     return 1 + Math.floor(Math.random() * (max - 1));
@@ -36,58 +36,47 @@ function resetGame() {
     scoreElt.textContent = '20';
     inputElt.value = '';
 
-    // console.log('New Solution >> ' + solution);
 }
 
 function check() {
 
-    const currentValue = parseInt(inputElt.value);
+    const inputValue = parseInt(inputElt.value);
 
-    if (inputElt.value !== '') {
-
-        if (nbTries < 2) {
-            messageElt.textContent = `PERDU... la solution était ${solution}`;
-            scoreElt.textContent = 0;
-        } else {
-            if (currentValue === solution) {
-                messageElt.textContent = 'BRAVO !!!';
-                finalNumberElt.textContent = solution;
-                localStorage.setItem('highScore', nbTries);
-                highscoreElt.textContent = localStorage.getItem('highScore');
-            } else {
-                if (currentValue < solution) {
-                    messageElt.textContent = 'Vous êtes en dessous'
-                } else {
-                    messageElt.textContent = 'Vous êtes au dessus'
-                }
-                nbTries --;
-                scoreElt.textContent = nbTries ;
-            }
-        }
-
+    if (isNaN(inputValue)) {
+        messageElt.textContent = 'Ce n\'est pas un nombre';
+        return;
     }
-    
+
+    if (inputValue === '') {
+        messageElt.textContent = 'Ce n\'est pas un nombre';
+        return;
+    }
+
+    if (inputValue <= 0 || inputValue > 20) {
+        messageElt.textContent = 'Le nombre doit être compris entre 1 et 20';
+        return;
+    }
+
+    if (nbTries < 2) {
+        messageElt.textContent = `PERDU... la solution était ${solution}`;
+        scoreElt.textContent = 0;
+    } else {
+        if (inputValue === solution) {
+            messageElt.textContent = 'BRAVO !!!';
+            finalNumberElt.textContent = solution;
+            localStorage.setItem('highScore', nbTries);
+            highscoreElt.textContent = localStorage.getItem('highScore');
+        } else {
+            if (inputValue < solution) {
+                messageElt.textContent = 'Vous êtes en dessous'
+            } else {
+                messageElt.textContent = 'Vous êtes au dessus'
+            }
+            nbTries --;
+            scoreElt.textContent = nbTries ;
+        }
+    }
 }
 
 btnPlay.addEventListener('click', check);
 btnPlayAgain.addEventListener('click', resetGame);
-
-// console.log('First Solution >> ' + solution);
-
-
-/* const changeText = (bool) => {
-    setTimeout(() => {
-        if (bool) {
-            element.textContent = 'Start guessing...'; 
-            ponctuation.textContent = '?';
-            score.textContent = 20;
-        } else {
-            element.textContent = 'Good...'; 
-            ponctuation.textContent = '!';
-            score.textContent = 30;
-        }
-        changeText(!bool);
-    }, 1000);
-} */
-// changeText();
-
