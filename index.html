@@ -5,26 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="style.css" />
-    <title>Guess My Number!</title>
+    <script src="https://kit.fontawesome.com/5474cfcdca.js" crossorigin="anonymous"></script>
+    <title>Devine un nombre !</title>
   </head>
   <body>
     <header>
-      <h1>Guess My Number!</h1>
-      <p class="between">(Between 1 and 20)</p>
-      <button class="btn again">Again!</button>
-      <div class="number">?</div>
+
     </header>
     <main>
+      <section>
+        <h1>Devinez un nombre !</h1>
+        <p class="between">[Entre 1 and ?]</p>
+        <button class="btn again">Rejouez !</button>
+        <div class="circle">
+          <div class="number">?</div>
+        </div>
+        <p class="message"></p>
+
+      </section>
       <section class="left">
-        <input type="number" class="guess" />
-        <button class="btn check">Check!</button>
+        <input type="number" class="guess" placeholder="?"/>
+        <button class="btn check">Devinez</button>
+
       </section>
       <section class="right">
-        <p class="message">Start guessing...</p>
-        <p class="label-score">💯 Score: <span class="score">20</span></p>
+        <p class="label-score">Essais : <span class="score">20</span></p>
         <p class="label-highscore">
-          🥇 Highscore: <span class="highscore">0</span>
+          <i class="fa-solid fa-trophy"></i> Highscore : <span class="highscore">0</span>
         </p>
+        <button class="btn highscoreBtn">Reset High-Score</button>
       </section>
     </main>
     <script src="script.js"></script>
