@@ -15,26 +15,33 @@
     <main>
       <section>
         <h1>Devinez un nombre !</h1>
-        <p class="between">[Entre 1 and ?]</p>
-        <button class="btn again">Rejouez !</button>
-        <div class="circle">
-          <div class="number">?</div>
+        <div class="choiceGlobal">
+          <h2>Choisissez votre difficulté : <br> <span class="max">(un entier positif maximal)</span> </h2><input type="number" class="difficulty"/>
+          <button class='btn choiceBtn'>choisissez</button>
         </div>
-        <p class="message"></p>
-
       </section>
-      <section class="left">
-        <input type="number" class="guess" placeholder="?"/>
-        <button class="btn check">Devinez</button>
-
-      </section>
-      <section class="right">
-        <p class="label-score">Essais : <span class="score">20</span></p>
-        <p class="label-highscore">
-          <i class="fa-solid fa-trophy"></i> Highscore : <span class="highscore">0</span>
-        </p>
-        <button class="btn highscoreBtn">Reset High-Score</button>
-      </section>
+      <div class="game">
+        <section>
+          <p class="between">[Entre 1 and ?]</p>
+          <button class="btn again">Rejouez !</button>
+          <div class="circle">
+            <div class="number">?</div>
+          </div>
+          <p class="message"></p>
+        </section>
+        <section class="left">
+          <input type="number" class="guess" placeholder="?"/>
+          <button class="btn check">Jouez</button>
+  
+        </section>
+        <section class="right">
+          <p class="label-score"><i class="fa-solid fa-hand-fist"></i> Essais : <span class="score">20</span></p>
+          <p class="label-highscore">
+            <i class="fa-solid fa-trophy"></i> Highscore : <span class="highscore">0</span>
+          </p>
+          <button class="btn highscoreBtn">Reset High-Score</button>
+        </section>
+      </div>
     </main>
     <script src="script.js"></script>
   </body>

@@ -5,17 +5,21 @@ const getEltByClass = (className) => {
     return document.querySelector(`.${className}`);
 }
 
-let messageElt = getEltByClass('message');
-let finalNumberElt = getEltByClass('number');
-let scoreElt = getEltByClass('score');
-let highscoreElt = getEltByClass('highscore');
-let btnPlay = getEltByClass('check');
-let inputElt = getEltByClass('guess');
-let btnPlayAgain = getEltByClass('again');
-let betweenElt = getEltByClass('between');
-let choiceElt = getEltByClass('choice');
-let btnChoose = getEltByClass('choose');
-let btnHighscore = getEltByClass('highscoreBtn');
+const messageElt = getEltByClass('message');
+const finalNumberElt = getEltByClass('number');
+const scoreElt = getEltByClass('score');
+const highscoreElt = getEltByClass('highscore');
+const btnPlay = getEltByClass('check');
+const inputElt = getEltByClass('guess');
+const btnPlayAgain = getEltByClass('again');
+const betweenElt = getEltByClass('between');
+const choiceElt = getEltByClass('choice');
+const btnChoose = getEltByClass('choose');
+const btnHighscore = getEltByClass('highscoreBtn');
+const btnChoice = getEltByClass('choiceBtn');
+const inputDifficultyElt = getEltByClass('difficulty');
+const gameElt = getEltByClass('game');
+const choiceGlobalElt = getEltByClass('choiceGlobal');
 
 let gameFinished = false;
 
@@ -23,16 +27,28 @@ function getRandomInt(max) {
     return 1 + Math.floor(Math.random() * (max - 1));
 }
 
-let choiceDifficulty = 20;
 
-let currentScore = choiceDifficulty;
+gameElt.style.display = 'none';
+choiceGlobalElt.style.display = 'block';
+
+let currentScore = 0;
 let solution = getRandomInt(currentScore);
 
-finalNumberElt.textContent = '?';
-scoreElt.textContent = currentScore;
-betweenElt.textContent = `[Entre 1 et ${currentScore}]`;
-messageElt.style.display = 'none';
-finalNumberElt.style.display = 'none';
+btnChoice.addEventListener('click', chooseDifficulty);
+
+
+function chooseDifficulty () {
+    currentScore = parseInt(inputDifficultyElt.value);
+    gameElt.style.display = 'block';
+    choiceGlobalElt.style.display = 'none';
+    solution = getRandomInt(currentScore);
+    finalNumberElt.textContent = '?';
+    scoreElt.textContent = currentScore;
+    betweenElt.textContent = `[Entre 1 et ${currentScore}]`;
+    messageElt.style.display = 'none';
+    finalNumberElt.style.display = 'none';
+    console.log('ok');
+}
 
 
 if (localStorage.getItem('highScore')) {
@@ -67,71 +83,80 @@ function resetGame() {
 
 function check() {
 
+    console.log(gameFinished);
+
     if (gameFinished) return;
 
     const inputValue = parseInt(inputElt.value);
     messageElt.style.display = 'block';
-    messageElt.style.color = 'red';
+    messageElt.style.color = 'rgb(140, 233, 237)';
 
 
     if (isNaN(inputValue)) {
-        messageElt.textContent = 'Ceci n\'est pas un nombre';
+        messageElt.textContent = 'Vous devez rentrer un nombre';
         return;
     }
 
     if (inputValue === '') {
-        messageElt.textContent = 'Ceci n\'est pas un nombre';
+        messageElt.textContent = 'Vous devez rentrer un nombre';
         return;
     }
 
-    if (inputValue <= 0 || inputValue > choiceDifficulty) {
-        messageElt.textContent = `Le nombre doit être compris entre 1 et ${choiceDifficulty}`;
+    if (inputValue <= 0 || inputValue > currentScore) {
+        messageElt.textContent = `Le nombre doit être compris entre 1 et ${currentScore}`;
         return;
     }
 
     if (currentScore < 2) {
+        messageElt.style.color = 'rgb(153, 1, 54)';
         messageElt.textContent = `PERDU... la solution était ${solution}`;
+        btnPlay.style.display = 'none';
+        finalNumberElt.style.display = 'block';
+        finalNumberElt.textContent = solution;
+        finalNumberElt.classList.add('wrong-number');
+        inputElt.style.display = 'none';
         scoreElt.textContent = 0;
         gameFinished = true;
         return;
-    } 
-    
-    if (inputValue === solution) {
-        messageElt.style.color = 'green';
-        messageElt.textContent = 'BRAVO !!!';
-        finalNumberElt.textContent = solution;
-        scoreElt.textContent = currentScore - 1;
-        gameFinished = true;
-        finalNumberElt.style.display = 'block';
-        finalNumberElt.classList.add('valid-number');
-        inputElt.style.display = 'none';
 
-        /* highscore */
-
-        if (!localStorage.getItem('highScore') || currentScore - 1 > localStorage.getItem('highScore')) {
-            localStorage.setItem('highScore', currentScore - 1);
-            highscoreElt.textContent = localStorage.getItem('highScore');
-            messageElt.textContent = `BRAVO, vous detenez le nouveau Highscore qui est de ${localStorage.getItem('highScore')} !!!`;
-        }
     } else {
-        inputElt.classList.add('error-animation');
-        setTimeout(() => {
-            inputElt.classList.remove('error-animation');
-        }, 500);
-        if (inputValue < solution) {
-            messageElt.textContent = 'Vous êtes en dessous'
+    
+        if (inputValue === solution) {
+            messageElt.style.color = 'green';
+            messageElt.textContent = 'BRAVO !!!';
+            btnPlay.style.display = 'none';
+            finalNumberElt.textContent = solution;
+            scoreElt.textContent = currentScore - 1;
+            gameFinished = true;
+            finalNumberElt.style.display = 'block';
+            finalNumberElt.classList.add('valid-number');
+            inputElt.style.display = 'none';
+
+            /* highscore */
+
+            if (!localStorage.getItem('highScore') || currentScore - 1 > localStorage.getItem('highScore')) {
+                localStorage.setItem('highScore', currentScore - 1);
+                highscoreElt.textContent = localStorage.getItem('highScore');
+                messageElt.textContent = `BRAVO, vous detenez le nouveau Highscore qui est de ${localStorage.getItem('highScore')} !!!`;
+            }
         } else {
-            messageElt.textContent = 'Vous êtes au dessus'
+            inputElt.classList.add('error-animation');
+            inputElt.style.backgroundColor = ' rgb(153, 1, 54)';
+            inputElt.style.color = 'white';
+            
+            setTimeout(() => {
+                inputElt.style.backgroundColor = 'rgb(153, 1, 54)';
+                inputElt.classList.remove('error-animation');
+            }, 500);
+            if (inputValue < solution) {
+                messageElt.textContent = 'Vous êtes en dessous'
+            } else {
+                messageElt.textContent = 'Vous êtes au dessus'
+            }
+            currentScore --;
+            scoreElt.textContent = currentScore ;
         }
-        currentScore --;
-        scoreElt.textContent = currentScore ;
     }
-
-
-
-    setTimeout(() => {
-        messageElt.style.display = 'none';
-    }, 2000);
 
 }
 

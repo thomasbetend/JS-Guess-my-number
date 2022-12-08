@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
 
 * {
   margin: 0;
@@ -8,8 +7,15 @@
   text-align: center;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 :root {
   --blue1: rgb(140, 233, 237);
+  --violet: rgb(55, 51, 89);
 }
 
 html {
@@ -34,6 +40,22 @@ i {
   color: var(--blue1);
   font-size: 1.5rem;
   padding-right: 2px;
+}
+
+.difficulty {
+  height : 5.6rem;
+  margin-right: 20px;
+  border-radius: 15px;
+  border: white solid 1px;
+}
+
+.choiceBtn {
+  border-radius: 15px;
+  background-color: rgb(55, 51, 89);
+  color: #ccc;
+  margin-top: 15px;
+  font-size: 1.4rem;
+  width: 35%;
 }
 
 main {
@@ -66,6 +88,16 @@ h1 {
   font-size: 4rem;
   text-align: center;
   width: 100%;
+}
+
+h2 {
+  margin-top: 15px;
+  font-size: 2.5rem;
+}
+
+.max {
+  font-size: 1.8rem;
+  color: var(--blue1);
 }
 
 .circle {
@@ -104,8 +136,10 @@ h1 {
   top: 2rem;
   right: 2rem;
   border-radius: 15px;
-  background-color: rgb(140, 233, 237);
-
+  background-color : rgb(55, 51, 89);
+  color: #ccc;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
 }
 
 .guess {
@@ -118,6 +152,7 @@ h1 {
   text-align: center;
   display: block;
   margin-bottom: 3rem;
+  border: 2px solid var(--blue1);
 }
 
 input::placeholder {
@@ -126,15 +161,12 @@ input::placeholder {
 
 .btn {
   border: none;
-  background-color: rgb(255, 255, 255);
-  color: #222;
-  font-size: 2rem;
   padding: 2rem 3rem;
   cursor: pointer;
 }
 
 .btn:hover {
-  background-color: #ccc;
+  background-color: rgb(139, 139, 139);
 }
 
 .message {
@@ -155,23 +187,27 @@ input::placeholder {
 .check {
   border-radius: 15px;
   margin-bottom: 20px;
+  font-size: 2rem;
 } 
 
 .highscoreBtn {
   border-radius: 15px;
-  background-color: rgb(116, 116, 116);
-  margin-bottom: 15px;
+  background-color: rgb(55, 51, 89);
+  color: #ccc;
+  margin-top: 15px;
   font-size: 1.4rem;
   width: 35%;
-  height: 8px;
 }
 
+.highscore {
+  color: var(--blue1);
+}
 
 /* Animation */
 
 .error-animation {
   animation: shakeIt 0.4s 1 linear;
-  background-color: red;
+  background-color: rgb(153, 1, 54);
   color: white;
 }
 
@@ -187,9 +223,42 @@ input::placeholder {
 .valid-number {
   animation: turnAround 0.4s 1 linear;
   background-color: green;
-  color: black;
+  color: white;
 }
 
 @keyframes turnAround {
   100% { transform: rotate(360deg); }
+}
+
+.wrong-number {
+  animation: turnAround 0.4s 1 linear;
+  background-color: rgb(153, 1, 54);
+  color: white;
+}
+
+@keyframes turnAround {
+  100% { transform: rotate(360deg); }
+}
+
+
+/* MEDIA QUERIES */
+
+@media screen and (max-width:450px) {
+  .right {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 4.4rem;
+  }
+
+  header {
+    height: 100px;
+  }
+
+  .between {
+    margin-bottom: 0px;
+  }
 }
