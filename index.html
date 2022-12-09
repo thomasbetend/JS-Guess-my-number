@@ -14,33 +14,39 @@
     </header>
     <main>
       <section>
+        <i class="fa-solid fa-dice"></i>
         <h1>Devinez un nombre !</h1>
         <div class="choiceGlobal">
-          <h2>Choisissez votre difficulté : <br> <span class="max">(un entier positif maximal)</span> </h2><input type="number" class="difficulty"/>
-          <button class='btn choiceBtn'>choisissez</button>
+          <h2>Choisissez votre difficulté : <br> <span class="max">(un entier positif maximal)</span> </h2>
+          <div class="btn-input-choice">
+            <input type="number" class="difficulty"/>
+            <button class='btn choiceBtn'>Validez votre choix</button>
+          </div>
         </div>
       </section>
       <div class="game">
-        <section>
-          <p class="between">[Entre 1 and ?]</p>
-          <button class="btn again">Rejouez !</button>
-          <div class="circle">
-            <div class="number">?</div>
-          </div>
-          <p class="message"></p>
-        </section>
-        <section class="left">
-          <input type="number" class="guess" placeholder="?"/>
-          <button class="btn check">Jouez</button>
-  
-        </section>
-        <section class="right">
-          <p class="label-score"><i class="fa-solid fa-hand-fist"></i> Essais : <span class="score">20</span></p>
-          <p class="label-highscore">
-            <i class="fa-solid fa-trophy"></i> Highscore : <span class="highscore">0</span>
-          </p>
-          <button class="btn highscoreBtn">Reset High-Score</button>
-        </section>
+        <div class="game-flex">
+          <section>
+            <p class="between">[Entre 1 and ?]</p>
+            <button class="btn again">Rejouez !</button>
+            <button class="btn changeGame">Changez la difficulté</button>
+            <div class="circle">
+              <div class="number">?</div>
+            </div>
+            <p class="message"></p>
+          </section>
+          <section class="left">
+            <input type="number" class="guess" placeholder="..." onkeypress="keyPlay(event)"/>
+            <button class="btn check" >Jouez</button>
+          </section>
+          <section class="right">
+            <p class="label-score"><i class="fa-solid fa-hand-fist"></i> Essais : <span class="score">20</span></p>
+            <p class="label-highscore">
+              <i class="fa-solid fa-trophy"></i> Highscore : <span class="highscore">0</span>
+            </p>
+            <button class="btn highscoreBtn">Reset High-Score</button>
+          </section>
+        </div>
       </div>
     </main>
     <script src="script.js"></script>

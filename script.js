@@ -1,6 +1,5 @@
 'use strict';
 
-
 const getEltByClass = (className) => {
     return document.querySelector(`.${className}`);
 }
@@ -20,70 +19,97 @@ const btnChoice = getEltByClass('choiceBtn');
 const inputDifficultyElt = getEltByClass('difficulty');
 const gameElt = getEltByClass('game');
 const choiceGlobalElt = getEltByClass('choiceGlobal');
+const btnChangeGame = getEltByClass('changeGame');
+
+let difficulty = 0;
+let nbTries = 0;
+let solution = 0;
+localStorage.setItem('highScore', 0);
 
 let gameFinished = false;
+
+gameElt.style.display = 'none';
+choiceGlobalElt.style.display = 'block';
 
 function getRandomInt(max) {
     return 1 + Math.floor(Math.random() * (max - 1));
 }
 
-
-gameElt.style.display = 'none';
-choiceGlobalElt.style.display = 'block';
-
-let currentScore = 0;
-let solution = getRandomInt(currentScore);
-
-btnChoice.addEventListener('click', chooseDifficulty);
-
-
 function chooseDifficulty () {
-    currentScore = parseInt(inputDifficultyElt.value);
+
+    difficulty = parseInt(inputDifficultyElt.value);
+
+    if (difficulty < 1 || isNaN(difficulty)) {
+        return;
+    }
+
+    nbTries = findTwoPower(difficulty);
     gameElt.style.display = 'block';
     choiceGlobalElt.style.display = 'none';
-    solution = getRandomInt(currentScore);
-    finalNumberElt.textContent = '?';
-    scoreElt.textContent = currentScore;
-    betweenElt.textContent = `[Entre 1 et ${currentScore}]`;
+    solution = getRandomInt(difficulty);
+    scoreElt.textContent = nbTries;
+    betweenElt.textContent = `[Entre 1 et ${difficulty}]`;
     messageElt.style.display = 'none';
     finalNumberElt.style.display = 'none';
-    console.log('ok');
+    console.log(solution);
 }
 
+/* function power to get nbTries function of difficulty */
 
-if (localStorage.getItem('highScore')) {
-    highscoreElt.textContent = localStorage.getItem('highScore');
-} else {
-    highscoreElt.textContent = '0';
+function powerNumber(number, power) {
+    if (power === 0) {
+        return 1;
+    }
+    if (power > 0) {
+        return number * powerNumber(number, power - 1);
+    }
+}
+
+function findTwoPower(number) {
+    let n = 0;
+    while (number > powerNumber(2, n)) {
+        n ++
+    }
+
+    return n ;
 }
 
 function resetHighScore () {
     localStorage.setItem('highScore', 0);
     highscoreElt.textContent = '0';
-    console.log('ok');
+}
+
+function changeDifficulty() {
+    location.reload();
+    resetHighScore();
+}
+
+function keyPlay(event) {
+    console.log(event);
+    if (event.key="Enter") check();
 }
 
 function resetGame() {
 
-    /* solution = getRandomInt(currentScore); 
-    currentScore = choiceDifficulty;
+    nbTries = findTwoPower(difficulty);
+    solution = getRandomInt(difficulty); 
     finalNumberElt.textContent = '?';
-    messageElt.textContent = 'Start guessing...'
-    scoreElt.textContent = `${currentScore}`;
+    scoreElt.textContent = `${nbTries}`;
     inputElt.value = '';
     finalNumberElt.classList.remove('valid-number');
+    finalNumberElt.classList.remove('wrong-number');
+    inputElt.style.backgroundColor = 'rgb(140, 233, 237)';
+    inputElt.style.color = 'black';
     inputElt.style.display = 'block';
-    finalNumberElt.style.display = 'none'; */  
-
-    location.reload();
+    finalNumberElt.style.display = 'none';
+    messageElt.style.display = 'none';
+    btnPlay.style.display = 'block';
+    gameFinished = false;
 
     console.log('reset solution >> ', solution);
-
 }
 
 function check() {
-
-    console.log(gameFinished);
 
     if (gameFinished) return;
 
@@ -102,12 +128,12 @@ function check() {
         return;
     }
 
-    if (inputValue <= 0 || inputValue > currentScore) {
-        messageElt.textContent = `Le nombre doit être compris entre 1 et ${currentScore}`;
+    if (inputValue <= 0 || inputValue > difficulty) {
+        messageElt.textContent = `Le nombre doit être compris entre 1 et ${difficulty}`;
         return;
     }
 
-    if (currentScore < 2) {
+    if (nbTries < 2 && inputValue !== solution) {
         messageElt.style.color = 'rgb(153, 1, 54)';
         messageElt.textContent = `PERDU... la solution était ${solution}`;
         btnPlay.style.display = 'none';
@@ -118,50 +144,55 @@ function check() {
         scoreElt.textContent = 0;
         gameFinished = true;
         return;
-
-    } else {
-    
-        if (inputValue === solution) {
-            messageElt.style.color = 'green';
-            messageElt.textContent = 'BRAVO !!!';
-            btnPlay.style.display = 'none';
-            finalNumberElt.textContent = solution;
-            scoreElt.textContent = currentScore - 1;
-            gameFinished = true;
-            finalNumberElt.style.display = 'block';
-            finalNumberElt.classList.add('valid-number');
-            inputElt.style.display = 'none';
-
-            /* highscore */
-
-            if (!localStorage.getItem('highScore') || currentScore - 1 > localStorage.getItem('highScore')) {
-                localStorage.setItem('highScore', currentScore - 1);
-                highscoreElt.textContent = localStorage.getItem('highScore');
-                messageElt.textContent = `BRAVO, vous detenez le nouveau Highscore qui est de ${localStorage.getItem('highScore')} !!!`;
-            }
-        } else {
-            inputElt.classList.add('error-animation');
-            inputElt.style.backgroundColor = ' rgb(153, 1, 54)';
-            inputElt.style.color = 'white';
-            
-            setTimeout(() => {
-                inputElt.style.backgroundColor = 'rgb(153, 1, 54)';
-                inputElt.classList.remove('error-animation');
-            }, 500);
-            if (inputValue < solution) {
-                messageElt.textContent = 'Vous êtes en dessous'
-            } else {
-                messageElt.textContent = 'Vous êtes au dessus'
-            }
-            currentScore --;
-            scoreElt.textContent = currentScore ;
-        }
     }
+    
+    if (inputValue === solution) {
 
+        messageElt.style.color = 'green';
+        messageElt.textContent = 'BRAVO !!!';
+        if (nbTries < 2) {
+            messageElt.textContent = 'Vous avez ttouvé la solution mais vous ne marquez aucun point...';
+        }
+        btnPlay.style.display = 'none';
+        finalNumberElt.textContent = solution;
+        scoreElt.textContent = nbTries - 1;
+        gameFinished = true;
+        finalNumberElt.style.display = 'block';
+        finalNumberElt.classList.add('valid-number');
+        inputElt.style.display = 'none';
+        console.log(nbTries);
+
+        /* highscore */
+
+        if (!localStorage.getItem('highScore') || nbTries - 1 > localStorage.getItem('highScore')) {
+            localStorage.setItem('highScore', nbTries - 1);
+            highscoreElt.textContent = localStorage.getItem('highScore');
+            messageElt.textContent = `BRAVO, vous detenez le nouveau Highscore qui est de ${localStorage.getItem('highScore')} !!!`;
+        }
+    } else {
+        inputElt.classList.add('error-animation');
+        inputElt.style.backgroundColor = ' rgb(153, 1, 54)';
+        inputElt.style.color = 'white';
+        
+        setTimeout(() => {
+            inputElt.style.backgroundColor = 'rgb(153, 1, 54)';
+            inputElt.classList.remove('error-animation');
+        }, 500);
+        if (inputValue < solution) {
+            messageElt.textContent = 'Vous êtes en dessous'
+        } else {
+            messageElt.textContent = 'Vous êtes au dessus'
+        }
+        nbTries --;
+        scoreElt.textContent = nbTries ;
+    }
 }
 
 btnPlay.addEventListener('click', check);
 btnPlayAgain.addEventListener('click', resetGame);
 btnHighscore.addEventListener('click', resetHighScore);
+btnChangeGame.addEventListener('click', changeDifficulty);
+btnChoice.addEventListener('click', chooseDifficulty);
 
-console.log('initial solution >> ', solution);
+console.log(solution);
+
