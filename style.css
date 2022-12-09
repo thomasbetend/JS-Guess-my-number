@@ -97,7 +97,8 @@ main {
 
 .fa-dice {
   font-size: 5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
+  margin-top: 2.4rem;;
 }
 
 /* ELEMENTS STYLE */
@@ -124,6 +125,11 @@ h2 {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.chrono {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
 }
 
 .number {
@@ -286,10 +292,15 @@ h2 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 37rem;
+  }
+
+  .left {
+    width: 37rem;
   }
 
   h1 {
-    font-size: 4.4rem;
+    font-size: 3rem;
   }
 
   header {
@@ -297,6 +308,27 @@ h2 {
   }
 
   .between {
-    margin-bottom: 0px;
+    margin-bottom: 10px;
+  }
+
+  .btn-input-choice {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .difficulty {
+    width: 80%;
+  }
+
+  .choiceBtn {
+    width: 80%;
+  }
+
+  .fa-dice {
+    font-size: 4rem;
+  }
+
+  .highscoreBtn {
+    width: 50%;
   }
 }

@@ -20,6 +20,9 @@ const inputDifficultyElt = getEltByClass('difficulty');
 const gameElt = getEltByClass('game');
 const choiceGlobalElt = getEltByClass('choiceGlobal');
 const btnChangeGame = getEltByClass('changeGame');
+const timer = document.querySelector(".timer");
+const chrono = document.querySelector(".chrono");
+
 
 let difficulty = 0;
 let nbTries = 0;
@@ -35,6 +38,26 @@ function getRandomInt(max) {
     return 1 + Math.floor(Math.random() * (max - 1));
 }
 
+let time = 0;
+
+function timerTimer() {
+
+    if(time <= 0) {
+        time = 0;
+        chrono.style.color = "red";
+        chrono.textContent = 'PERDU !!! PLUS DE TEMPS';
+        gameFinished = true;
+        clearInterval();
+        return;
+    } 
+    time --;
+    time <= 10 ? chrono.style.color = 'red' : chrono.style.color = 'white';
+
+    timer.textContent = time;
+    console.log(time);
+    timer.textContent = time;
+}
+
 function chooseDifficulty () {
 
     difficulty = parseInt(inputDifficultyElt.value);
@@ -42,8 +65,9 @@ function chooseDifficulty () {
     if (difficulty < 1 || isNaN(difficulty)) {
         return;
     }
-
     nbTries = findTwoPower(difficulty);
+    time = nbTries * 5;
+    timer.textContent = time;
     gameElt.style.display = 'block';
     choiceGlobalElt.style.display = 'none';
     solution = getRandomInt(difficulty);
@@ -52,7 +76,10 @@ function chooseDifficulty () {
     messageElt.style.display = 'none';
     finalNumberElt.style.display = 'none';
     console.log(solution);
+    setInterval(timerTimer, 1000);
+
 }
+
 
 /* function power to get nbTries function of difficulty */
 
@@ -67,7 +94,7 @@ function powerNumber(number, power) {
 
 function findTwoPower(number) {
     let n = 0;
-    while (number > powerNumber(2, n)) {
+    while (powerNumber(2, n) < number) {
         n ++
     }
 
@@ -86,7 +113,8 @@ function changeDifficulty() {
 
 function keyPlay(event) {
     console.log(event);
-    if (event.key="Enter") check();
+    if (KeyboardEvent.key="Enter") check();
+    return;
 }
 
 function resetGame() {
@@ -105,6 +133,12 @@ function resetGame() {
     messageElt.style.display = 'none';
     btnPlay.style.display = 'block';
     gameFinished = false;
+
+    time = nbTries * 5;
+    chrono.style.color = 'white';
+    timer.textContent = time;
+
+    setInterval(timerTimer, 1000);
 
     console.log('reset solution >> ', solution);
 }
@@ -179,9 +213,9 @@ function check() {
             inputElt.classList.remove('error-animation');
         }, 500);
         if (inputValue < solution) {
-            messageElt.textContent = 'Vous êtes en dessous'
+            messageElt.textContent = 'Votre nombre est trop petit'
         } else {
-            messageElt.textContent = 'Vous êtes au dessus'
+            messageElt.textContent = 'Votre nombre est trop grand'
         }
         nbTries --;
         scoreElt.textContent = nbTries ;
